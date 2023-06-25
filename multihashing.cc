@@ -83,8 +83,9 @@ int rx2id(xmrig::Algorithm::Id algo) {
 
 static randomx_vm*    rx_vm[MAXRX]            = {nullptr};
 
-static randomx_cache* rx_cache[3*MAXRX]         = {nullptr};
-static uint8_t        rx_seed_hash[3*MAXRX][32] = {0};
+const rx_seed_cache_size = 1; // 3*MAXRX
+static randomx_cache* rx_cache[rx_seed_cache_size]         = {nullptr};
+static uint8_t        rx_seed_hash[rx_seed_cache_size][32] = {0};
 
 struct InitCtx {
     InitCtx() {
@@ -126,7 +127,7 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
 
     static int new_rxid = 0;
     int found_rxid = -1;
-    for (int i = 0; i != 3*MAXRX; ++ i)
+    for (int i = 0; i != rx_seed_cache_size; ++ i)
       if (memcmp(rx_seed_hash[i], seed_hash_data, sizeof(rx_seed_hash[0])) == 0) {
         found_rxid = i;
         break;
@@ -141,7 +142,7 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
         randomx_init_cache(rx_cache[new_rxid], rx_seed_hash[new_rxid], sizeof(rx_seed_hash[0]));
         found_rxid = new_rxid;
         ++ new_rxid;
-        if (new_rxid >= 3*MAXRX) new_rxid = 0;
+        if (new_rxid >= rx_seed_cache_size) new_rxid = 0;
     }
 
     if (!rx_vm[rxid]) {
