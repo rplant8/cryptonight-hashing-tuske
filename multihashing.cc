@@ -90,6 +90,7 @@ static uint8_t        rx_seed_hash[rx_seed_cache_size][32] = {0};
 struct InitCtx {
     InitCtx() {
         xmrig::CnCtx::create(&ctx, static_cast<uint8_t*>(my_malloc(max_mem_size, 4096)), max_mem_size, 1);
+        for (int i = 0; i != rx_seed_cache_size; ++ i) memset(rx_seed_hash[i], 0xCC, sizeof(rx_seed_hash[0]));
     }
 } s;
 
