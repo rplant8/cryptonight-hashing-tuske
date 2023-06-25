@@ -139,7 +139,7 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
         }
         memcpy(rx_seed_hash[new_rxid], seed_hash_data, sizeof(rx_seed_hash[0]));
         randomx_init_cache(rx_cache[new_rxid], rx_seed_hash[new_rxid], sizeof(rx_seed_hash[0]));
-        found_rxid = new_rx_id;
+        found_rxid = new_rxid;
         ++ new_rxid;
         if (new_rxid >= 3*MAXRX) new_rxid = 0;
     }
