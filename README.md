@@ -24,7 +24,7 @@ Algorithms
 Installing locally and testing
 -----
 ```
-npm install https://github.com/MoneroOcean/node-cryptonight-hashing
+JOBS=$(nproc) npm install https://github.com/MoneroOcean/node-cryptonight-hashing
 node_modules/cryptonight-hashing/tests/run.sh
 ```
 
