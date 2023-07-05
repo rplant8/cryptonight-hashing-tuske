@@ -83,7 +83,7 @@ int rx2id(xmrig::Algorithm::Id algo) {
 
 static randomx_vm*    rx_vm[MAXRX]            = {nullptr};
 
-const int rx_seed_cache_size = 3*MAXRX;
+const int rx_seed_cache_size = MAXRX+2;
 static randomx_cache* rx_cache[rx_seed_cache_size]         = {nullptr};
 static uint8_t        rx_seed_hash[rx_seed_cache_size][32] = {0};
 
