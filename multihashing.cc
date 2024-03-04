@@ -133,7 +133,6 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
         break;
       }
 
-    bool is_new_cache = false;
     if (found_rxid == -1) {
         static int new_rxid = 0;
 	if (rx_cache[new_rxid] == nullptr) {
@@ -147,7 +146,6 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
         found_rxid = new_rxid;
         ++ new_rxid;
         if (new_rxid >= rx_seed_cache_size) new_rxid = 0;
-        is_new_cache = true;
     }
 
     if (rx_vm[rxid] == nullptr) {
@@ -159,7 +157,7 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
         flags |= RANDOMX_FLAG_HARD_AES;
 #endif
         rx_vm[rxid] = randomx_create_vm(static_cast<randomx_flags>(flags), rx_cache[found_rxid], nullptr, mem.scratchpad(), 0);
-    } else if (is_new_cache) {
+    } else {
         randomx_vm_set_cache(rx_vm[rxid], rx_cache[found_rxid]);
     }
 }
