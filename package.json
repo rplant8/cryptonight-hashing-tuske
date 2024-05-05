@@ -1,7 +1,6 @@
 {
     "name": "cryptonight-hashing",
     "version": "28.1.2",
-    "main": "cryptonight-hashing",
     "author": {
         "name": "Multiple",
         "email": "Check The Git Repo"
