@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "crypto/randomx/vm_compiled.hpp"
 #include "crypto/randomx/vm_compiled_light.hpp"
 #include "crypto/randomx/blake2/blake2.h"
+#include "crypto/randomx/panthera/sha256.h"
 
 #if defined(_M_X64) || defined(__x86_64__)
 #include "crypto/randomx/jit_compiler_x86_static.hpp"
@@ -133,18 +134,20 @@ RandomX_ConfigurationGraft::RandomX_ConfigurationGraft()
 }
 
 RandomX_ConfigurationBase::RandomX_ConfigurationBase()
-	: ArgonMemory(262144)
+        : ArgonMemory(262144)
         , CacheAccesses(8)
         , DatasetBaseSize(2147483648)
-        , ArgonIterations(3)
-	, ArgonLanes(1)
-	, ArgonSalt("RandomX\x03")
-	, ScratchpadL1_Size(16384)
-	, ScratchpadL2_Size(262144)
-	, ScratchpadL3_Size(2097152)
-	, ProgramSize(256)
-	, ProgramIterations(2048)
-	, ProgramCount(8)
+        , ArgonIterations(4)
+        , ArgonLanes(2)
+        , ArgonSalt("TuskeRandomX\x03")
+        , ScratchpadL1_Size(16384)
+        , ScratchpadL2_Size(262144)
+        , ScratchpadL3_Size(2097152)
+        , ProgramSize(256)
+        , ProgramIterations(2048)
+        , ProgramCount(8)
+
+
 	, RANDOMX_FREQ_IADD_RS(16)
 	, RANDOMX_FREQ_IADD_M(7)
 	, RANDOMX_FREQ_ISUB_R(16)
@@ -628,6 +631,8 @@ extern "C" {
 		}
 		machine->run(&tempHash);
 		machine->getFinalResult(output);
+                SHA256_Buf((uint8_t*)output, RANDOMX_HASH_SIZE, (uint8_t*)output);
+                SHA256_Buf((uint8_t*)output, RANDOMX_HASH_SIZE, (uint8_t*)output);
 	}
 
 	void randomx_calculate_hash_first(randomx_vm* machine, uint64_t (&tempHash)[8], const void* input, size_t inputSize, const xmrig::Algorithm algo) {
@@ -654,6 +659,8 @@ extern "C" {
 		    default: rx_blake2b_wrapper::run(tempHash, sizeof(tempHash), nextInput, nextInputSize);
 		}
 		machine->hashAndFill(output, tempHash);
+                SHA256_Buf((uint8_t*)output, RANDOMX_HASH_SIZE, (uint8_t*)output);
+                SHA256_Buf((uint8_t*)output, RANDOMX_HASH_SIZE, (uint8_t*)output);
 	}
 
 }
